@@ -1,18 +1,23 @@
 // Author: Apostolos Chalis 2024
-use std::fs; 
+use std::fs;
 
-pub fn read_proc_stat(){
-    let proc_stat_content = fs::read_to_string("/proc/stat").expect("Error: Can not read /proc/stat"); 
-    let mut proc_stat_first_line: String = Default::default(); 
+pub fn read_proc_stat() -> Vec<u32> {
+    let proc_stat_content = fs::read_to_string("/proc/stat").expect("Error: Can not read /proc/stat");
 
-    for ch in proc_stat_content.chars(){ 
-        if ch != '\n'{
-            proc_stat_first_line.push(ch);  
-        }
-        else{
-            break; 
+    let mut proc_stat_first_line: String = Default::default();
+
+    for ch in proc_stat_content.chars() {
+        if ch != '\n' {
+            proc_stat_first_line.push(ch);
+        } else {
+            break;
         }
     }
-    
-    println!("{}", proc_stat_first_line); 
+
+    let cpu_data: Vec<u32> = proc_stat_first_line
+        .split(char::is_whitespace)
+        .filter_map(|s| s.parse().ok())
+        .collect();
+
+    cpu_data 
 }
