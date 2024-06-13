@@ -9,7 +9,9 @@ pub fn parse_args()->HashMap<String,String> {
     let mut program_args:HashMap<String,String> = HashMap::new();
     let mut skipped_iter = args.iter();
     skipped_iter.next();
+    //skip the directory from which it was executed
     for arg in skipped_iter {
+        //i probably do too many copies generally, cos String is owned where i could just use &str
         let mut split_vals = arg.split("=").take(2);
         let argname = split_vals.next();
         let argval = split_vals.next();
