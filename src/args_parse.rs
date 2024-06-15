@@ -1,5 +1,10 @@
 use std::env;
 use std::collections::HashMap;
+
+
+ 
+
+/// Parses arguments from the command line into a HashMap like --property=value --property2=value2
 pub fn parse_args()->HashMap<String,String> {
     println!("Parsing args from command line");
     let args: Vec<_> = env::args().collect();
