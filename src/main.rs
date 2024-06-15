@@ -1,4 +1,5 @@
-// Author: Apostolos Chalis,George Fakidis 2024
+// SPDX-License-Identifier: MIT
+// © 2024 Apostolos Chalis, George Fakidis
 use std::collections::HashMap;
 mod args_parse;
 mod read_cpu;
