@@ -1,24 +1,37 @@
 // SPDX-License-Identifier: MIT
 // © 2024 Apostolos Chalis, George Fakidis
-use std::fs;
+use std::fs::File;
+use std::io::{self, BufRead};
+use std::thread::sleep;
+use std::time::Duration;
 
-pub fn read_proc_stat() -> Vec<u32> {
-    let proc_stat_content = fs::read_to_string("/proc/stat").expect("Error: Can not read /proc/stat");
+pub fn get_cpu_util() -> io::Result<()> {
+    let mut last_idle = 0.0;
+    let mut last_total = 0.0;
 
-    let mut proc_stat_first_line: String = Default::default();
+    loop {
+        let file = File::open("/proc/stat")?;
+        let reader = io::BufReader::new(file);
+        let line = reader.lines().next().unwrap()?;
+        let fields: Vec<f64> = line.split_whitespace()
+                                   .skip(1)
+                                   .map(|s| s.parse().unwrap())
+                                   .collect();
 
-    for ch in proc_stat_content.chars() {
-        if ch != '\n' {
-            proc_stat_first_line.push(ch);
-        } else {
-            break;
-        }
+        let idle = fields[3];
+        let total: f64 = fields.iter().sum();
+
+        let idle_delta = idle - last_idle;
+        let total_delta = total - last_total;
+
+        last_idle = idle;
+        last_total = total;
+
+        let utilisation = 100.0 * (1.0 - idle_delta / total_delta);
+        print!("{:5.1}%", utilisation);
+        print!("\r");
+
+        sleep(Duration::from_secs(5));
     }
-
-    let cpu_data: Vec<u32> = proc_stat_first_line
-        .split(char::is_whitespace)
-        .filter_map(|s| s.parse().ok())
-        .collect();
-
-    cpu_data 
 }
+
