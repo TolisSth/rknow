@@ -1,4 +1,5 @@
-// Author: Apostolos Chalis 2024
+// SPDX-License-Identifier: MIT
+// © 2024 Apostolos Chalis, George Fakidis
 use std::fs;
 
 pub fn read_proc_stat() -> Vec<u32> {
