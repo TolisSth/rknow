@@ -1,4 +1,5 @@
-// Author: Apostolos Chalis 2024 <achalis@csd.auth.gr> 
+// SPDX-License-Identifier: MIT
+// © 2024 Apostolos Chalis, George Fakidis
 // libc stuff
 use libc::umask; 
 use libc::dup2; 
