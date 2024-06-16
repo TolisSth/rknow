@@ -12,7 +12,7 @@ fn main() {
 
 fn execute_tool(options:HashMap<String,String>) { 
     //they will be both calling the same function with just some preprocessing before they do so
-    if(options.is_empty()) {
+    if options.is_empty() {
         println!("Executing with default options");
         return ;
     }
