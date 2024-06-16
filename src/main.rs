@@ -1,14 +1,17 @@
 // SPDX-License-Identifier: MIT
 // © 2024 Apostolos Chalis, George Fakidis
 use std::collections::HashMap;
+
+// First party
 mod args_parse;
 mod read_cpu;
+mod daemonize; 
+
 fn main() {
     println!("rknow ~ A Rust system profiler v0.1.0\nApostolos Chalis, George Fakidis 2024");
     let profiler_options = args_parse::parse_args();
     execute_tool(profiler_options);
 }
-
 
 fn should_daemonize(options:&HashMap<String,String> )->bool {
     return options.contains_key("D") || options.contains_key("daemon") || options.contains_key("daemonize");
@@ -21,7 +24,6 @@ fn show_cpu(options:&HashMap<String,String>) -> bool {
 fn show_ram(options:&HashMap<String,String>) -> bool {
     return options.contains_key("r") || options.contains_key("R") || options.contains_key("ram") || options.contains_key("RAM");
 }
-
 
 fn show_help(options:&HashMap<String,String>) -> bool {
     return options.contains_key("h") || options.contains_key("H") || options.contains_key("help") || options.contains_key("HELP");
@@ -52,9 +54,11 @@ Flags:
 fn run_as_daemon(cpu:bool,ram:bool,disk:bool,network:bool) {
     
     println!("Running as daemon in the background");
+    daemonize::daemonize(); 
+
     loop {
         if cpu {
-            read_cpu::read_proc_stat();
+            read_cpu::get_cpu_util();
         }
 
         if ram {
@@ -75,7 +79,7 @@ fn run_as_daemon(cpu:bool,ram:bool,disk:bool,network:bool) {
 fn run_normally(cpu:bool,ram:bool,disk:bool,network:bool){
     loop {
         if cpu {
-            println!("{:?}",read_cpu::read_proc_stat());
+            println!("{:?}",read_cpu::get_cpu_util());
         }
 
         if ram {
@@ -115,6 +119,5 @@ fn execute_tool(options:HashMap<String,String>) {
     println!("Executing with non-default params");
 
     return ;
-
 }
 
