@@ -1,10 +1,10 @@
-// Author: Apostolos Chalis,George Fakidis 2024
-use std::{collections::HashMap};
+// SPDX-License-Identifier: MIT
+// © 2024 Apostolos Chalis, George Fakidis
+use std::collections::HashMap;
 mod args_parse;
 mod read_cpu;
 fn main() {
-    println!("rknow ~ A Rust system profiler v0.1.0\nApostolos Chalis 2024");
-    read_cpu::read_proc_stat();
+    println!("rknow ~ A Rust system profiler v0.1.0\nApostolos Chalis, George Fakidis 2024");
     let profiler_options = args_parse::parse_args();
     execute_tool(profiler_options);
 }

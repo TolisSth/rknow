@@ -1,3 +1,5 @@
+// SPDX-License-Identifier: MIT
+// © 2024 Apostolos Chalis, George Fakidis
 use std::env;
 use std::collections::HashMap;
 
