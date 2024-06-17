@@ -2,6 +2,10 @@
 // © 2024 Apostolos Chalis, George Fakidis
 use std::collections::HashMap;
 
+// File system
+use std::fs::OpenOptions; 
+use std::io::prelude::*;
+
 // First party
 mod args_parse;
 mod read_cpu;
@@ -13,7 +17,7 @@ fn main() {
     execute_tool(profiler_options);
 }
 
-fn should_daemonize(options:&HashMap<String,String> )->bool {
+fn should_daemonize(options:&HashMap<String,String> ) -> bool {
     return options.contains_key("D") || options.contains_key("daemon") || options.contains_key("daemonize");
 }
 
@@ -54,11 +58,16 @@ Flags:
 fn run_as_daemon(cpu:bool,ram:bool,disk:bool,network:bool) {
     
     println!("Running as daemon in the background");
-    daemonize::daemonize(); 
+    daemonize::daemonize(); // From now on there is no output 
 
     loop {
+        let mut log_file = OpenOptions::new()
+            .append(true)
+            .create(true)
+            .open("/var/log/rknow.log")
+            .expect("ERROR: Could not open rknow.log");
+
         if cpu {
-            read_cpu::get_cpu_util();
         }
 
         if ram {
