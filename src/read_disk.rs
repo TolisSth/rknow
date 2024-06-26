@@ -18,7 +18,7 @@ fn get_info_from(s:&str) -> Option<DiskInfo> {
     let size = size_str.next().expect("Size attribute could not be read").strip_suffix("k").expect("Size attribute does not end in K for some reason");
     let info = DiskInfo {
         disk_name:mount_point.to_owned(),
-        disk_kb:size.into(),
+        disk_kb:size.parse().unwrap(),
     };
     Some(info)
 }
