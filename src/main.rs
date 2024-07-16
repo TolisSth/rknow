@@ -9,6 +9,7 @@ use std::io::prelude::*;
 // First party
 mod args_parse;
 mod read_cpu;
+mod read_ram; 
 mod daemonize; 
 
 fn main() {
@@ -60,18 +61,20 @@ fn run_as_daemon(cpu:bool,ram:bool,disk:bool,network:bool) {
     println!("Running as daemon in the background");
     daemonize::daemonize(); // From now on there is no output 
 
-    loop {
-        let mut log_file = OpenOptions::new()
-            .append(true)
-            .create(true)
-            .open("/var/log/rknow.log")
-            .expect("ERROR: Could not open rknow.log");
+    // Open file once
+    let mut log_file = OpenOptions::new()
+        .append(true)
+        .create(true)
+        .open("/var/log/rknow.log")
+        .expect("ERROR: Could not open rknow.log");
 
-        if cpu {
+    loop {
+       if cpu {
         }
 
         if ram {
             println!("reading from ram");
+            
         }
 
         if disk {
@@ -88,13 +91,12 @@ fn run_as_daemon(cpu:bool,ram:bool,disk:bool,network:bool) {
 fn run_normally(cpu:bool,ram:bool,disk:bool,network:bool){
     loop {
         if cpu {
-            println!("{:?}",read_cpu::get_cpu_util());
+           // println!("{:?}",read_cpu::get_cpu_util());
         }
 
         if ram {
-            println!("reading from ram");
+            println!("{:?}", read_ram::read_ram_of_system());
         }
-
         if disk {
             println!("reading from disk");
         }
